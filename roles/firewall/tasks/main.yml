@@ -1,0 +1,11 @@
+---
+
+  - include: debian-ufw.yml
+    when: ansible_os_family =='Debian' or ansible_os_family =='Ubuntu'
+
+
+  - include: centos-firewalld.yml
+    when: ansible_os_family =='RedHat'
+
+  - include: kali-iptables.yml
+    when: ansible_os_family =='Kali'

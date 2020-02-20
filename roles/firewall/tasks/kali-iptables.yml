@@ -1,0 +1,21 @@
+---
+
+- include: install.yml
+
+- name: Loop back
+  iptables: chain=INPUT action=append in_interface=lo jump=ACCEPT comment='accept all loopback'
+
+- name: Connection rule
+  iptables: chain=INPUT ctstate='ESTABLISHED,RELATED' jump=ACCEPT comment=''
+
+- name: SSH port rule
+  iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port=22 comment='accept ssh traffic'
+
+- name: HTTP port 80 
+  iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port=80 comment='accept http traffic'
+
+- name: HTTPS port 443 SSL
+  iptables: chain=INPUT jump=ACCEPT protocol=tcp destination_port=443 comment='accept SSL traffic'
+
+- name: Drop Any Traffic Without Rule
+  iptables: chain=INPUT jump=DROP comment='Drop traffic for rules'

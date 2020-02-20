@@ -1,0 +1,31 @@
+---
+
+- include: install.yml
+
+- name: enable ufw
+  ufw: state=enabled policy=allow
+
+- name: disable default inbound
+  ufw: direction=incoming policy=deny
+
+- name: Allow ssh inc
+  ufw: rule=limit name=OpenSSH
+
+- name: 443 HTTPS
+  ufw: rule=allow port=443 proto=tcp
+
+- name: Enable Logging & restart ufw
+  ufw: logging=on
+  notify:
+   - restart ufw
+
+- name: access to private ip address
+  ufw: rule=allow src='{{ item }}'
+  with_items:
+    - 10.0.0.0/8
+    - 172.16.0.0/12
+    - 192.168.0.0/16
+
+- name: View ufw Rules
+  command: ufw status
+  register: out

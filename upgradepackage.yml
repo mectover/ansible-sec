@@ -1,0 +1,21 @@
+---
+- name: Upgrade all packages to the latest version
+  hosts: all
+    
+  tasks:
+  
+  - name: Upgrade all packages to the latest version
+    apt:
+      update_cache: yes
+      upgrade: yes
+      when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu' or ansible_distribution == 'Kali'
+
+  - name: upgrade all packages
+  	yum: name=* state=latest
+    when: ansible_distribution == 'RedHat'
+
+  - name: install epel-release
+    yum:
+      name: epel-release
+      state: latest
+    when: ansible_distribution == 'RedHat'
